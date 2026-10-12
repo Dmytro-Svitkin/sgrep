@@ -1,4 +1,4 @@
-use basic_rust_template::*;
+use sgrep::*;
 
 #[test]
 fn test(){}

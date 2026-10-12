@@ -1,8 +1,8 @@
 [package]
-name = "basic-rust-template"
+name = "sgrep"
 version = "0.0.0"
 edition = "2024"
-repository = "https://github.com/Dmytro-Svitkin/basic-rust-template"
+repository = "https://github.com/Dmytro-Svitkin/sgrep"
 license = "BSD-3-Clause"
 
 [dependencies]
