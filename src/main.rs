@@ -47,11 +47,13 @@ fn match_str_command(str_command:&str)->Command{
 fn resolve_invalid_command(invalid_command_str:&str){}// To be used only when the Command is known to be None.
 
 fn is_path(path_str:&str)->bool{// Any path is valid as long as it starts and ends with double-quotation-marks (").
-    return!path_str.is_empty()&&path_str.chars().nth(0).unwrap()=='"'&&path_str.chars().last().unwrap()=='"'
+    return path_str.len()>2&&path_str.chars().nth(0).unwrap()=='"'&&path_str.chars().last().unwrap()=='"'
 }
 
 fn main(){
     for argument in get_arguments(){
-        println!("{:?}",match_str_command(&argument))
+        println!("{:?}",match_str_command(&argument));
+
+        println!("{}",is_path("\"b\""))
     }
 }
