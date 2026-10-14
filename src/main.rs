@@ -1,8 +1,8 @@
-use std::env;
+use std::{fs,env};
 
-#[derive(Debug)]
+#[derive(Debug,PartialEq)]
 enum Command{
-    New,Move,Remove,Read,Write,Rewrite,Replace,Copy,Permisson,List,Scan,
+    New,Move,Remove,Read,Write,Rewrite,Replace,Copy,Permisson,List,Scan,Execute,
     None
 }
 
@@ -25,6 +25,8 @@ fn match_str_command(str_command:&str)->Command{
             "perm"=>      return Command::Permisson,
             "list"=>      return Command::List,
             "scan"=>      return Command::Scan,
+            "execute"=>   return Command::Execute,
+            "exe"=>       return Command::Execute,
             
             "nw"=>return Command::New,
             "mv"=>return Command::Move,
@@ -37,6 +39,8 @@ fn match_str_command(str_command:&str)->Command{
             "pr"=>return Command::Permisson,
             "ls"=>return Command::List,
             "sc"=>return Command::Scan,
+            "ex"=>return Command::Execute,
+            "x"=> return Command::Execute,
             
             _=>return Command::None,
         }
@@ -44,16 +48,25 @@ fn match_str_command(str_command:&str)->Command{
     Command::None
 }
 
-fn resolve_invalid_command(invalid_command_str:&str){}// To be used only when the Command is known to be None.
+fn resolve_invalid_command(command_str:&str)->&str{// To be used only when the Command is known to be None.
+    if match_str_command(command_str)==Command::None&&!is_path(command_str){panic!("[!] ILLEGAL INPUT")}
+    else{command_str}
+}
 
-fn is_path(path_str:&str)->bool{// Any path is valid as long as it starts and ends with double-quotation-marks (").
+fn is_path(path_str:&str)->bool{// Any path is valid as long as it starts and ends with double-quotation-marks, while containing at lease 1 character (`"path/something"`).
     return path_str.len()>2&&path_str.chars().nth(0).unwrap()=='"'&&path_str.chars().last().unwrap()=='"'
 }
 
 fn main(){
-    for argument in get_arguments(){
-        println!("{:?}",match_str_command(&argument));
-
-        println!("{}",is_path("\"b\""))
+    let arguments:Vec<String>=get_arguments();
+    let mut file_path_argument:String=String::new();
+    let mut index_flag:bool=false;
+    
+    for argument in arguments{
+        if index_flag==true{file_path_argument=argument.clone();break}
+        if match_str_command(&argument)==Command::Read{index_flag=true}
     }
+
+    let content:String=fs::read_to_string(file_path_argument).expect("[!] FILE NOT FOUND");
+    println!("{}",content)
 }
